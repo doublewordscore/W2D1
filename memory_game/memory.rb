@@ -1,6 +1,9 @@
 require_relative "board"
 require_relative "player"
 
+class MemoryInputError < StandardError
+end
+
 class MemoryGame
   attr_reader :player
 
@@ -29,8 +32,12 @@ class MemoryGame
   def get_player_input
     pos = nil
 
-    until pos && valid_pos?(pos)
+    begin
       pos = player.get_input
+      raise MemoryInputError.new("Invalid position, try again") unless valid_pos?(pos)
+    rescue MemoryInputError => e
+      puts e.message
+      retry
     end
 
     pos
@@ -38,7 +45,7 @@ class MemoryGame
 
   def make_guess(pos)
     revealed_value = board.reveal(pos)
-    player.receive_revealed_card(pos, revealed_value) 
+    player.receive_revealed_card(pos, revealed_value)
     board.render
 
     compare_guess(pos)
@@ -74,5 +81,5 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   size = ARGV.empty? ? 4 : ARGV.shift.to_i
-  MemoryGame.new(ComputerPlayer.new(size), size).play
+  MemoryGame.new(HumanPlayer.new(size), size).play
 end

@@ -1,5 +1,8 @@
 require_relative "card"
 
+class MemoryRevealError < StandardError
+end
+
 class Board
   attr_reader :size
 
@@ -24,10 +27,15 @@ class Board
   end
 
   def reveal(pos)
-    if revealed?(pos)
-      puts "You can't flip a card that has already been revealed."
-    else
-      self[pos].reveal
+    begin
+      if revealed?(pos)
+        raise MemoryRevealError.new("You can't flip a card that has already been revealed.")
+      else
+        self[pos].reveal
+      end
+    rescue MemoryRevealError => e
+      puts e.message
+      sleep(1)
     end
     self[pos].value
   end
