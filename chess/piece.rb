@@ -11,7 +11,7 @@ class Piece
   end
 
   def to_s
-    color == :white ? "♘" : "♗"
+    # color == :white ? "♘" : "♗"
   end
 
   def inspect
@@ -82,6 +82,11 @@ class Bishop < SlidingPiece
   def move_dirs
     { horizontal: false, diagonal: true}
   end
+
+  def to_s
+    color == :white ? "♗" : "♝"
+  end
+
 end
 
 class Rook < SlidingPiece
@@ -89,11 +94,19 @@ class Rook < SlidingPiece
   def move_dirs
     { horizontal: true, diagonal: false}
   end
+
+  def to_s
+    color == :white ? "♖" : "♜"
+  end
 end
 
 class Queen < SlidingPiece
   def move_dirs
     { horizontal: true, diagonal: true}
+  end
+
+  def to_s
+    color == :white ? "♕" : "♛"
   end
 end
 
@@ -114,11 +127,19 @@ class King < SteppingPiece
   def deltas
     [[-1,-1], [-1,0], [-1,1], [0,1], [1,1], [1,0], [1,-1], [0,-1]]
   end
+
+  def to_s
+    color == :white ? "♔" : "♚"
+  end
 end
 
 class Knight < SteppingPiece
   def deltas
     [[-1,-2], [-1,2], [1,2], [1,-2], [2,1], [2,-1], [-2,-1], [-2,1]]
+  end
+
+  def to_s
+    color == :white ? "♘" : "♞"
   end
 end
 
@@ -129,6 +150,10 @@ class Pawn < Piece
   def initialize(color, board, pos)
     super(color, board, pos)
     @has_moved = false
+  end
+
+  def to_s
+    color == :white ? "♙" : "♟"
   end
 
   def moves
