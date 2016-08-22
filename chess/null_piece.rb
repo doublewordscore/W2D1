@@ -1,4 +1,4 @@
-require_relative 'board.rb'
+require_relative 'board'
 
 class NullPiece
 
@@ -6,14 +6,16 @@ class NullPiece
   end
 
   def color
+    nil
   end
 
   def to_s
+    " "
   end
 
   def empty?
   end
-    
+
 
 
 

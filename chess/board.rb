@@ -1,8 +1,17 @@
-require_relative 'chess.rb'
-require_relative 'display.rb'
-require_relative 'piece.rb'
+# require_relative 'chess'
+require_relative 'display'
+require_relative 'piece'
+require_relative 'null_piece'
+require 'byebug'
 
 class Board
+
+  attr_accessor :rows
+
+  def self.in_bounds?(pos)
+    x, y = pos
+    x.between?(0, 7) && y.between?(0, 7)
+  end
 
   def initialize
     @rows = Array.new(8) { Array.new(8) }
@@ -28,15 +37,15 @@ class Board
 
   def move_piece(color, from_pos, to_pos)
     begin
-      current_piece = @rows[from_pos]
+      current_piece = self[from_pos]
       if current_piece.class == NullPiece
         raise ChessError.new("No piece at starting position")
       end
 
-      raise ChessError.new("Cannot move to that position") #if ??
+      raise ChessError.new("Cannot move to that position") unless Board.in_bounds?(to_pos)
       current_piece.pos = to_pos
-      @row[from_pos] = NullPiece.new
-      @rows[to_pos] = current_piece
+      self[from_pos] = NullPiece.new
+      self[to_pos] = current_piece
     rescue ChessError => e
       puts e.message
     end
@@ -54,22 +63,19 @@ class Board
 
   def make_starting_grid
     @rows.each_with_index do |row, r_index|
+      # debugger
       row.each_with_index do |square, c_index|
           if r_index.between?(0,1)
-            square = Piece.new(:black, self, [r_index, c_index])
+            self[[r_index, c_index]] = Piece.new(:black, self, [r_index, c_index])
           elsif r_index.between?(6,7)
-            square = Piece.new(:white, self, [r_index, c_index])
+            self[[r_index, c_index]] = Piece.new(:white, self, [r_index, c_index])
           else
-            square = NullPiece.new
+            self[[r_index, c_index]] = NullPiece.new
           end
       end
     end
+    # p @rows
   end
-
-
-
-
-
 
 
 
