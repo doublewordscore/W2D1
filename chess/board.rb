@@ -18,7 +18,20 @@ class Board
     make_starting_grid
   end
 
-  def move(start_pos, end_pos)
+  def move(from_pos, to_pos)
+    begin
+      current_piece = self[from_pos]
+      if current_piece.class == NullPiece
+        raise ChessError.new("No piece at starting position")
+      end
+
+      raise ChessError.new("Cannot move to that position") unless Board.in_bounds?(to_pos)
+      current_piece.pos = to_pos
+      self[from_pos] = NullPiece.instance
+      self[to_pos] = current_piece
+    rescue ChessError => e
+      puts e.message
+    end
   end
 
   def [](pos)
@@ -34,25 +47,6 @@ class Board
   def dup
   end
 
-
-  def move_piece(color, from_pos, to_pos)
-    begin
-      current_piece = self[from_pos]
-      if current_piece.class == NullPiece
-        raise ChessError.new("No piece at starting position")
-      end
-
-      raise ChessError.new("Cannot move to that position") unless Board.in_bounds?(to_pos)
-      current_piece.pos = to_pos
-      self[from_pos] = NullPiece.new
-      self[to_pos] = current_piece
-    rescue ChessError => e
-      puts e.message
-    end
-  end
-
-  def move_piece!(from_pos, to_pos)
-  end
 
   def checkmate?
   end
@@ -70,7 +64,7 @@ class Board
           elsif r_index.between?(6,7)
             self[[r_index, c_index]] = Piece.new(:white, self, [r_index, c_index])
           else
-            self[[r_index, c_index]] = NullPiece.new
+            self[[r_index, c_index]] = NullPiece.instance
           end
       end
     end

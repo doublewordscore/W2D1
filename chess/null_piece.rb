@@ -1,6 +1,8 @@
 require_relative 'board'
+require 'singleton'
 
 class NullPiece
+  include Singleton
 
   def moves
   end

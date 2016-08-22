@@ -78,14 +78,8 @@ class Cursor
 
   def handle_key(key)
     case key
-    when :left
-      update_pos(MOVES[:left])
-    when :right
-      update_pos(MOVES[:right])
-    when :up
-      update_pos(MOVES[:up])
-    when :down
-      update_pos(MOVES[:down])
+    when :left, :right, :up, :down
+      update_pos(MOVES[key])
     when :return, :space
       @cursor_pos
     when :ctrl_c

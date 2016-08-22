@@ -1,4 +1,5 @@
 require_relative 'board'
+require 'byebug'
 
 class Piece
 
@@ -23,18 +24,103 @@ class Piece
   def symbol
   end
 
-  def valid_moves
+  def moves
   end
+
 
   private
 
   def move_into_check?(to_pos)
   end
 
+end
 
+class SlidingPiece < Piece
+  def moves
+    # debugger
+    x, y = pos
+    possible_moves = []
+    if move_dirs[:horizontal]
+      possible_moves += eval_moves(-1, 0)
+      possible_moves += eval_moves(1, 0)
+      possible_moves += eval_moves(0, -1)
+      possible_moves += eval_moves(0, 1)
+    end
 
+    if move_dirs[:diagonal]
+      possible_moves += eval_moves(-1, -1)
+      possible_moves += eval_moves(1, -1)
+      possible_moves += eval_moves(-1, 1)
+      possible_moves += eval_moves(1, 1)
+    end
+    possible_moves
+  end
 
+  def eval_moves(dx, dy)
+    possible_moves = []
+    x, y = pos
+    new_x = x + dx
+    new_y = y + dy
+    while Board.in_bounds?([new_x, new_y])
+      if @board[[new_x, new_y]].is_a?(NullPiece)
+        possible_moves << [new_x, new_y]
+        new_x += dx
+        new_y += dy
+      elsif @board[[new_x, new_y]].color == @color
+        break
+      else # piece can capture opponent's piece
+        possible_moves << [new_x, new_y]
+        break
+      end
+    end
+    possible_moves
+  end
 
+end
 
+class Bishop < SlidingPiece
+  def move_dirs
+    { horizontal: false, diagonal: true}
+  end
+end
 
+class Rook < SlidingPiece
+
+  def move_dirs
+    { horizontal: true, diagonal: false}
+  end
+end
+
+class Queen < SlidingPiece
+  def move_dirs
+    { horizontal: true, diagonal: true}
+  end
+end
+
+class SteppingPiece < Piece
+  def moves
+    x, y = pos
+    possible_moves = []
+    deltas.each do |dx, dy|
+      new_x, new_y = x + dx, y + dy
+      next unless Board.in_bounds?([new_x, new_y])
+      possible_moves << [new_x, new_y] unless @board[[new_x, new_y]].color == @color
+    end
+    possible_moves
+  end
+end
+
+class King < SteppingPiece
+  def deltas
+    [[-1,-1], [-1,0], [-1,1], [0,1], [1,1], [1,0], [1,-1], [0,-1]]
+  end
+end
+
+class Knight < SteppingPiece
+  def deltas
+    [[-1,-2], [-1,2], [1,2], [1,-2], [2,1], [2,-1], [-2,-1], [-2,1]]
+  end
+end
+
+class Pawn < Piece
 end
