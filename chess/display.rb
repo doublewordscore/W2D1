@@ -16,9 +16,6 @@ class Display
     @cursor = Cursor.new([0,0], board)
   end
 
-  def move(new_pos)
-  end
-
   def render(possible_destinations = [])
     @board.rows.each_with_index do |row, r_index|
       row.each_with_index do |square, c_index|

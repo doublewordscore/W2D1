@@ -32,6 +32,8 @@ class ChessGame
     puts "#{@current_player.name} wins!"
   end
 
+  private
+
   def swap_turn
     @current_player = (@current_player == @player1 ? @player2 : @player1)
   end

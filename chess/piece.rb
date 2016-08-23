@@ -61,6 +61,8 @@ class SlidingPiece < Piece
     possible_moves
   end
 
+  private
+
   def eval_moves(dx, dy)
     possible_moves = []
     x, y = pos

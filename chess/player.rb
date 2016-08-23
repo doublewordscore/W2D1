@@ -7,13 +7,6 @@ class HumanPlayer
     @name = name
   end
 
-  def notify_players(display)
-    puts "It is #{name}'s turn!"
-    if display.board.in_check?(color)
-      puts "You are in check!"
-    end
-  end
-
   def play_turn(display)
 
     notify_players(display)
@@ -38,6 +31,15 @@ class HumanPlayer
     [from_pos, to_pos]
   end
 
+  private
+
+  def notify_players(display)
+    puts "It is #{name}'s turn!"
+    if display.board.in_check?(color)
+      puts "You are in check!"
+    end
+  end
+
 end
 
 
@@ -47,25 +49,6 @@ class ComputerPlayer
 
   def initialize(name)
     @name = name
-  end
-
-  def find_all_computer_moves(display)
-    comp_pieces = display.board.rows.flatten.select { |piece| piece.color == color }
-    possible_moves = []
-    comp_pieces.each do |piece|
-      piece.valid_moves.each do |to_pos|
-        possible_moves << [piece.pos, to_pos]
-      end
-    end
-    possible_moves
-  end
-
-  def find_computer_captures(possible_moves, display)
-    other_color = color == :white ? :black : :white
-    possible_captures = display.board.rows.flatten.select { |piece| piece.color == other_color }
-    poss_capture_pos = possible_captures.map { |piece| piece.pos }
-    capture_moves = possible_moves.select { |from_pos, to_pos| poss_capture_pos.include?(to_pos) }
-    capture_moves
   end
 
   def play_turn(display)
@@ -83,6 +66,27 @@ class ComputerPlayer
     else
       possible_moves.sample
     end
+  end
+
+  private
+  
+  def find_all_computer_moves(display)
+    comp_pieces = display.board.rows.flatten.select { |piece| piece.color == color }
+    possible_moves = []
+    comp_pieces.each do |piece|
+      piece.valid_moves.each do |to_pos|
+        possible_moves << [piece.pos, to_pos]
+      end
+    end
+    possible_moves
+  end
+
+  def find_computer_captures(possible_moves, display)
+    other_color = color == :white ? :black : :white
+    possible_captures = display.board.rows.flatten.select { |piece| piece.color == other_color }
+    poss_capture_pos = possible_captures.map { |piece| piece.pos }
+    capture_moves = possible_moves.select { |from_pos, to_pos| poss_capture_pos.include?(to_pos) }
+    capture_moves
   end
 
 end
