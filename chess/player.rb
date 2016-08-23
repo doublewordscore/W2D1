@@ -52,7 +52,11 @@ class ComputerPlayer
         possible_moves << [piece.pos, to_pos]
       end
     end
-    possible_moves.sample
+    other_color = color == :white ? :black : :white
+    possible_captures = display.board.rows.flatten.select { |piece| piece.color == other_color }
+    poss_capture_pos = possible_captures.map { |piece| piece.pos }
+    capture_moves = possible_moves.select { |from_pos, to_pos| poss_capture_pos.include?(to_pos) }
+    capture_moves.empty? ? possible_moves.sample : capture_moves.sample
   end
 
 end
