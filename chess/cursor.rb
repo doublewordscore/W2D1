@@ -90,9 +90,11 @@ class Cursor
   end
 
   def update_pos(diff)
+    # debugger
     x, y = @cursor_pos
     dx, dy = diff
-    @cursor_pos = [x + dx, y + dy] if Board.in_bounds?(@cursor_pos)
+    @cursor_pos = [x + dx, y + dy] if Board.in_bounds?([x + dx, y + dy])
+    # sleep(1)
   end
 
 
