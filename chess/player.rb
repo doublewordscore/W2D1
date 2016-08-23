@@ -7,26 +7,31 @@ class HumanPlayer
     @name = name
   end
 
-  def notify_players
+  def notify_players(display)
     puts "It is #{name}'s turn!"
+    if display.board.in_check?(color)
+      puts "You are in check!"
+    end
   end
 
   def play_turn(display)
 
-    notify_players
+    notify_players(display)
     display.render
     while display.cursor.get_input
       system("clear")
-      notify_players
+      notify_players(display)
       display.render
     end
     from_pos = display.cursor.cursor_pos
 
+    possible_destinations = display.board[from_pos].valid_moves
+
     system("clear")
-    display.render
+    display.render(possible_destinations)
     while display.cursor.get_input
       system("clear")
-      display.render
+      display.render(possible_destinations)
     end
     to_pos = display.cursor.cursor_pos
 

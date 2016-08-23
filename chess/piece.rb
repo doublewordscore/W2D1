@@ -89,7 +89,7 @@ class Bishop < SlidingPiece
   end
 
   def to_s
-    color == :white ? "♗" : "♝"
+    color == :white ? "♝" : "♝" #♗
   end
 
 end
@@ -101,7 +101,8 @@ class Rook < SlidingPiece
   end
 
   def to_s
-    color == :white ? "♖" : "♜"
+    color == :white ? "♜" : "♜"
+    # ♖
   end
 end
 
@@ -111,7 +112,7 @@ class Queen < SlidingPiece
   end
 
   def to_s
-    color == :white ? "♕" : "♛"
+    color == :white ? "♛" : "♛" #♕
   end
 end
 
@@ -134,7 +135,7 @@ class King < SteppingPiece
   end
 
   def to_s
-    color == :white ? "♔" : "♚"
+    color == :white ? "♔" : "♔" #♚
   end
 end
 
@@ -144,7 +145,7 @@ class Knight < SteppingPiece
   end
 
   def to_s
-    color == :white ? "♘" : "♞"
+    color == :white ? "♞" : "♞" #♘
   end
 end
 
@@ -158,7 +159,7 @@ class Pawn < Piece
   end
 
   def to_s
-    color == :white ? "♙" : "♟"
+    color == :white ? "♟" : "♟" #♙
   end
 
   def moves

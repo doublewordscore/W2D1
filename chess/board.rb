@@ -48,6 +48,18 @@ class Board
     current_piece.pos = to_pos
     self[from_pos] = NullPiece.instance
     self[to_pos] = current_piece
+
+    promote_pawns(current_piece, to_pos)
+  end
+
+  def promote_pawns(current_piece, to_pos)
+    if current_piece.is_a?(Pawn) && current_piece.color == :white &&
+        to_pos[0] == 0
+      self[[0,to_pos[1]]] = Queen.new(:white, self, [0,to_pos[1]])
+    elsif current_piece.is_a?(Pawn) && current_piece.color == :black &&
+        to_pos[0] == 7
+      self[[7,to_pos[1]]] = Queen.new(:black, self, [7,to_pos[1]])
+    end
   end
 
   def [](pos)
