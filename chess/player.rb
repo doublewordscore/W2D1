@@ -34,3 +34,25 @@ class HumanPlayer
   end
 
 end
+
+
+class ComputerPlayer
+  attr_reader :name
+  attr_accessor :color
+
+  def initialize(name)
+    @name = name
+  end
+
+  def play_turn(display)
+    comp_pieces = display.board.rows.flatten.select { |piece| piece.color == color }
+    possible_moves = []
+    comp_pieces.each do |piece|
+      piece.valid_moves.each do |to_pos|
+        possible_moves << [piece.pos, to_pos]
+      end
+    end
+    possible_moves.sample
+  end
+
+end

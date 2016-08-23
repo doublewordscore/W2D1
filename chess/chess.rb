@@ -42,8 +42,9 @@ end
 
 p1 = HumanPlayer.new("Player 1")
 p2 = HumanPlayer.new("Player 2")
+cp = ComputerPlayer.new("Computer Player 1")
 b = Board.new
-g = ChessGame.new(b, p1, p2)
+g = ChessGame.new(b, cp, p2)
 g.play
 
 # d.test_display

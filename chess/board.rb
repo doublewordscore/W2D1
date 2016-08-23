@@ -33,14 +33,12 @@ class Board
       unless current_piece.valid_moves.include?(to_pos)
         raise ChessError.new("Invalid move")
       end
-      current_piece.pos = to_pos
-      self[from_pos] = NullPiece.instance
-      self[to_pos] = current_piece
+      move!(from_pos, to_pos)
       self[to_pos].has_moved = true if self[to_pos].is_a?(Pawn)
       made_move = true
     rescue ChessError => e
       puts e.message
-      sleep(2)
+      sleep(1)
     end
     made_move
   end
@@ -134,10 +132,6 @@ class Board
     self[[7,7]] = Rook.new(:white, self, [7,7])
 
   end
-
-
-
-
 
 
 end

@@ -4,7 +4,7 @@ require_relative 'cursor'
 
 class Display
 
-  attr_accessor :cursor, :show_debug_info
+  attr_accessor :cursor, :show_debug_info, :board
 
   def initialize(board, show_debug_info = false)
     @board = board
