@@ -80,12 +80,13 @@ class Cursor
     case key
     when :left, :right, :up, :down
       update_pos(MOVES[key])
+      return true
     when :return, :space
-      @cursor_pos
+      return false
     when :ctrl_c
       Process.exit(0)
     end
-
+    true
   end
 
   def update_pos(diff)

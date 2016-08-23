@@ -18,20 +18,38 @@ class Board
     make_starting_grid
   end
 
-  def move(from_pos, to_pos)
+  def move(from_pos, to_pos, current_player_color)
+    made_move = false
     begin
       current_piece = self[from_pos]
       if current_piece.class == NullPiece
         raise ChessError.new("No piece at starting position")
       end
+      if current_piece.color != current_player_color
+        raise ChessError.new("Not your piece")
+      end
 
       raise ChessError.new("Cannot move to that position") unless Board.in_bounds?(to_pos)
+      unless current_piece.valid_moves.include?(to_pos)
+        raise ChessError.new("Invalid move")
+      end
       current_piece.pos = to_pos
       self[from_pos] = NullPiece.instance
       self[to_pos] = current_piece
+      self[to_pos].has_moved = true if self[to_pos].is_a?(Pawn)
+      made_move = true
     rescue ChessError => e
       puts e.message
+      sleep(2)
     end
+    made_move
+  end
+
+  def move!(from_pos, to_pos)
+    current_piece = self[from_pos]
+    current_piece.pos = to_pos
+    self[from_pos] = NullPiece.instance
+    self[to_pos] = current_piece
   end
 
   def [](pos)
@@ -45,17 +63,34 @@ class Board
   end
 
   def dup
+    dup_board = Board.new
+    dup_board.rows.each_with_index do |row, r_index|
+      row.each_with_index do |piece, c_index|
+        if self[[r_index, c_index]].is_a?(NullPiece)
+          dup_board[[r_index,c_index]] = self[[r_index, c_index]]
+        else
+          dup_board[[r_index,c_index]] = self[[r_index, c_index]].dup
+          dup_board[[r_index, c_index]].board = dup_board
+        end
+      end
+    end
+    dup_board
   end
 
 
-  def checkmate?
+  def checkmate?(color)
+    return false unless in_check?(color)
+    player_pieces = @rows.flatten.select {|piece| piece.color == color}
+    player_pieces.each do |piece|
+      return false if piece.valid_moves.length > 0
+    end
+    true
   end
 
   def in_check?(color)
     other_color = color == :white ? :black : :white
     king = @rows.flatten.select { |piece| piece.is_a?(King) &&
       piece.color == color}.first
-    p king
     opponent_pieces = @rows.flatten.select { |piece| piece.color == other_color }
     opponent_pieces.any? { |piece| piece.moves.include?(king.pos) }
   end

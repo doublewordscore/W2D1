@@ -4,9 +4,9 @@ require_relative 'cursor'
 
 class Display
 
-  attr_accessor :cursor
+  attr_accessor :cursor, :show_debug_info
 
-  def initialize(board)
+  def initialize(board, show_debug_info = false)
     @board = board
     @cursor = Cursor.new([0,0], board)
   end
@@ -38,14 +38,11 @@ class Display
       end
       puts
     end
-  end
-
-  def test_display
-    loop do
-      system("clear")
-      render
-      @cursor.get_input
+    if show_debug_info
+      p @cursor_pos
+      sleep 10
     end
   end
+
 
 end

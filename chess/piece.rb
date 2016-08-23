@@ -3,8 +3,8 @@ require 'byebug'
 
 class Piece
 
-  attr_reader :color, :board
-  attr_accessor :pos
+  attr_reader :color
+  attr_accessor :pos, :board
 
   def initialize(color, board, pos)
     @color, @board, @pos = color, board, pos
@@ -18,19 +18,17 @@ class Piece
     "#{color} piece in spot #{pos}"
   end
 
-  def empty?
-  end
-
-  def symbol
-  end
-
-  def moves
+  def valid_moves
+    moves.reject { |move| move_into_check?(move) }
   end
 
 
   private
 
   def move_into_check?(to_pos)
+    dup_board = board.dup
+    dup_board.move!(pos, to_pos)
+    dup_board.in_check?(color)
   end
 
 end
